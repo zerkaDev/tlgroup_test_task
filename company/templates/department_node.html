@@ -1,0 +1,33 @@
+<div class="accordion-item">
+    <h2 class="accordion-header" id="heading-{{ node_id }}">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-{{ node_id }}" aria-expanded="false"
+                aria-controls="collapse-{{ node_id }}">
+            {{ node.name }}
+        </button>
+    </h2>
+    <div id="collapse-{{ node_id }}" class="accordion-collapse collapse">
+        <div class="accordion-body ps-4">
+            {% if node.employees %}
+                <form method="get" class="mb-2">
+                    <input type="text" name="search_{{ node_id }}" class="form-control"
+                           placeholder="Поиск сотрудников...">
+                </form>
+
+                <ul class="list-group mb-2">
+                    {% for emp in node.employees %}
+                        <li class="list-group-item">
+                            {{ emp.surname }} {{ emp.first_name }} {{ emp.middle_name }} — {{ emp.position }} — {{ emp.salary }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            {% for child_id, child_node in node.items %}
+                {% if child_id != "id" and child_id != "node_id" and child_id != "name" and child_id != "employees" %}
+                    {% include "department_node.html" with node_id=child_id node=child_node %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
